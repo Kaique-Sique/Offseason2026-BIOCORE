@@ -5,12 +5,15 @@
 package br.megazord7563.Robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  */
 public class RobotContainer {
+
+  public static final CommandXboxController driverJoystick = new CommandXboxController(0);
 
   public RobotContainer() {
     configureBindings();
