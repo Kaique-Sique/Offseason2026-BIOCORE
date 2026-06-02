@@ -4,18 +4,42 @@
 
 package br.megazord7563.Robot;
 
+import br.megazord7563.Robot.Constants.RobotConstants;
+import br.megazord7563.Robot.subsystems.swerve.GyroIO;
+import br.megazord7563.Robot.subsystems.swerve.ModuleIOSim;
+import br.megazord7563.Robot.subsystems.swerve.SwerveModule;
+import br.megazord7563.Robot.subsystems.swerve.SwerveSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- */
 public class RobotContainer {
+  public static SwerveSubsystem m_swerveDrive;
 
   public static final CommandXboxController driverJoystick = new CommandXboxController(0);
 
   public RobotContainer() {
+    switch (RobotConstants.robotMode) {
+      case SIM:
+        m_swerveDrive = new SwerveSubsystem(new SwerveModule(new ModuleIOSim(), "FL"), 
+                                            new SwerveModule(new ModuleIOSim(), "FR"), 
+                                            new SwerveModule(new ModuleIOSim(), "BL"),  
+                                            new SwerveModule(new ModuleIOSim(), "BR"),  
+                                            new GyroIO() {});
+        break;
+      default:
+        break;
+    }
+
+    m_swerveDrive.setDefaultCommand(new RunCommand(
+        () -> m_swerveDrive.driveFieldOriented(
+            () -> MathUtil.applyDeadband(driverJoystick.getLeftY(), 0.1),
+            () -> MathUtil.applyDeadband(driverJoystick.getLeftX(), 0.1),
+            () -> -MathUtil.applyDeadband(driverJoystick.getRightX(), 0.1),
+            () -> driverJoystick.rightStick().getAsBoolean()),
+        m_swerveDrive));
+
     configureBindings();
   }
 

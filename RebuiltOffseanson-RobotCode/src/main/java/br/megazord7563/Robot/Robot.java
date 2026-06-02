@@ -10,6 +10,7 @@ package br.megazord7563.Robot;
 import com.revrobotics.util.StatusLogger;
 
 import br.megazord7563.Robot.Constants.RobotConstants;
+import br.megazord7563.lib.TelemetryManager;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -167,6 +168,8 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("Alerts/JoystickAlert", joystickAlert.get());
     Logger.recordOutput("Robot/BatteryVoltage", BatteryVoltage);
     Logger.recordOutput("Robot/MatchTime", DriverStation.getMatchTime());
+
+    TelemetryManager.getInstance().periodic(Timer.getFPGATimestamp());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
